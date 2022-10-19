@@ -1,6 +1,6 @@
 // const randomNames = require('random-name') ;
 
-// const names = [   
+// const names = [
 // ];
 
 // for (let i = 0; i < 50; i++) {
