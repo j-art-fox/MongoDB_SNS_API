@@ -1,12 +1,12 @@
 const { Schema, model } = require("mongoose");
 
-const userSchema = new Schema(
+const thoughtSchema = new Schema(
   {
-    username: {
+    thoughtText: {
       type: String,
-      unique: true,
       required: true,
-      trim: true,
+      minlength: 1,
+      maxlength: 250
     },
     email: {
       type: String,
@@ -38,10 +38,6 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.virtual('friendCount').get(() => {
-    return this.friends.length;
-});
+const Thought = model("Thought", thoughtSchema);
 
-const User = model("User", userSchema);
-
-module.exports = User;
+module.exports = Thought;
