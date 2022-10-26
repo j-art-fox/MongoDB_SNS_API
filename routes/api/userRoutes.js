@@ -4,10 +4,14 @@ const {
   postUser,
   destroyUser,
   postFriend,
-  destroyFriend
+  destroyFriend,
+  getUser,
+  updateUser,
+  
 } = require("../../controllers/userController");
 
-routes.route("/:userId?").get(getAllUsers).post(postUser).delete(destroyUser);
-routes.route("/:userId/friends/:friendId?").post(postFriend).delete(destroyFriend);
+routes.route("/").get(getAllUsers).post(postUser);
+routes.route("/:userId").get(getUser).delete(destroyUser).put(updateUser);
+routes.route("/:userId/friends/:friendId").post(postFriend).delete(destroyFriend);
 
 module.exports = routes;

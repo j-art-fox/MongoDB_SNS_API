@@ -1,12 +1,40 @@
 const { User } = require("../models");
 
 module.exports = {
+  async getUser(req, res) {
+    try {
+      const data = await User.findById(req.params.userId)
+      .populate("thoughts")
+      .populate("friends", "username email friends");
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);      
+    }
+  },
+
   async getAllUsers(req, res) {
     try {
       const data = await User.find();
       res.json(data);
     } catch (err) {
       res.status(500).json(err.message);
+    }
+  },
+  async getAllUsers(req, res) {
+    try {
+      const data = await User.find();
+      res.json(data);
+    } catch (err) {
+      res.status(500).json(err.message);
+    }
+  },
+
+  async updateUser(req, res) {
+    try {
+      const data = await User.findByIdAndUpdate(req.params.userId, req.body, {new: true});
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
     }
   },
 
@@ -29,18 +57,9 @@ module.exports = {
   },
 
   //Friends
-  async getAllFriends(req, res) {
-    try {
-      const data = await User.find()
-      req.json(data);
-    } catch (err) {
-      res.status(500).json(err.message);
-    }
-  },
-
   async postFriend(req, res) {
     try {
-      const data = await User.findOneAndUpdate({_id:req.params.userId},{$addToSet: {friends: req.params.friendId}});
+      const data = await User.findOneAndUpdate({_id:req.params.userId},{$addToSet: {friends: req.params.friendId}},{new:true});
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -49,7 +68,7 @@ module.exports = {
 
   async destroyFriend(req, res) {
     try {
-      const data = await User.findOneAndDelete(req.params.userId);
+      const data = await User.findByIdAndUpdate(req.params.userId, {$pull:{friends: req.params.friendId}});
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
