@@ -49,14 +49,13 @@ module.exports = {
 
   async destroyUser(req, res) {
     try {
-      const data = await User.findOneAndDelete(req.params.userId);
+      const data = await User.findByIdAndDelete(req.params.userId);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   },
 
-  //Friends
   async postFriend(req, res) {
     try {
       const data = await User.findOneAndUpdate({_id:req.params.userId},{$addToSet: {friends: req.params.friendId}},{new:true});
@@ -68,7 +67,11 @@ module.exports = {
 
   async destroyFriend(req, res) {
     try {
-      const data = await User.findByIdAndUpdate(req.params.userId, {$pull:{friends: req.params.friendId}});
+      const data = await User.findByIdAndUpdate(
+        req.params.userId,
+         {$pull:{friends: req.params.friendId}},
+         { runValidators: true, new: true }
+         );
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
